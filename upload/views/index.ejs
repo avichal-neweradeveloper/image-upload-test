@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+   <head>
+      <meta charset="utf-8" />
+      <title>upload</title>
+      <link
+         href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+         rel="stylesheet"
+         integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+         crossorigin="anonymous"
+      />
+      <style>
+         .Disabled {
+            pointer-events: none;
+            cursor: not-allowed;
+            opacity: 0.65;
+            filter: alpha(opacity=65);
+            -webkit-box-shadow: none;
+            box-shadow: none;
+         }
+      </style>
+   </head>
+   <body>
+      <h1 name="heading1">from</h1>
+      <form action="/upload" method="POST" enctype="multipart/form-data">
+         <div class="custom-file mb-3">
+            <input
+               type="file"
+               name="file"
+               accept=".jpg , .png, .jpe"
+               id="file"
+               class="custom-file-input"
+               onchange="myFunction()"
+            />
+            <input type="hidden" name="Student" value="haha" />
+            <input type="hidden" id="hid" name="nameOfStudent" />
+            <h5 id="errorMessage" value=""></h5>
+            <div id="result"></div>
+            <!-- <label for="file" class="custom-file-label">Choose File</label> -->
+         </div>
+         <input
+            id="submitButton1"
+            type="submit"
+            value="Submit"
+            class="btn btn-primary btn-block Disabled"
+         />
+      </form>
+      <% if(fileSent){ fileSent.forEach(function(file) { %>
+      <div>
+         <img src="<%= file.image %>" alt="" />
+
+         <form method="POST" action="/files/<%= file._id %>?_method=DELETE">
+            <button class="btn btn-danger btn-block mt-4">Delete</button>
+         </form>
+      </div>
+      <% }) } else { %>
+      <p>No files uploaded</p>
+      <% } %>
+   </body>
+   <script>
+      function myFunction() {
+         if (document.getElementById("file").value !== "") {
+            let element = document.getElementById("submitButton1");
+            let errorMessage = document.getElementById("errorMessage");
+            if (
+               event.target.files[0].type === "image/jpeg" ||
+               event.target.files[0].type === "image/jpg" ||
+               event.target.files[0].type === "image/png"
+            ) {
+               element.classList.remove("Disabled");
+               errorMessage.innerHTML = "";
+            } else {
+               element.classList.add("Disabled");
+               errorMessage.innerHTML = "Select an image file only";
+            }
+         } else {
+            element.classList.add("Disabled");
+         }
+      }
+   </script>
+</html>
